@@ -13,8 +13,7 @@ const VersionAdd = () => {
     const [packageInfo, setPackageInfo] = useState('');
 
     useEffect(() => {
-        console.log("useeffect");
-        if(submit ==true){
+        if(submit === true){
         (async () => {
             try {
                 const response = await axios.post('http://ec2-54-180-37-118.ap-northeast-2.compute.amazonaws.com:8080/vercontrol/versionadd'
@@ -52,10 +51,9 @@ const VersionAdd = () => {
                             <input type="text" placeholder='packageInfo' onChange={(e) => setPackageInfo(e.target.value)}></input>
                         </div>
                         <div>
-                            <button onClick={() => { setSubmit(true) }}>전송</button>
-                            <button onClick={() => setModalIsOpen(false)}>나가기</button>
+                            <button onClick={() => (setSubmit(true), setModalIsOpen(false))}>추가</button>
+                            <button onClick={() => setModalIsOpen(false)}>취소</button>
                         </div>
-
                     </div>
                 </Modal>
             </div>

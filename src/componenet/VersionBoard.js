@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios'
 import VersionDelete from './VersionDelete.js'
+import VersionUpdate from './VersionUpdate.js'
+import VersionTest from './VersionTest.js'
 
 const VersionBoard = () => {
   const [version, setVersion] = useState('');
   const [page, setPage] = useState(0);
-
+  const pageSize = 10;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://ec2-54-180-37-118.ap-northeast-2.compute.amazonaws.com:8080/vercontrol/getconfigall'
-          , { "pageNumber": page, "pageSize": 10 }, { headers: { 'Content-Type': 'application/json' } });
-          setVersion(response.data);
+        const response = await axios.get(`http://ec2-54-180-37-118.ap-northeast-2.compute.amazonaws.com:8080/vercontrol/getconfigall?pageNumber=${page}&pageSize=${pageSize}`);
+        setVersion(response.data);
       } catch (e) {
         console.log(e)
       }
@@ -26,7 +27,7 @@ const VersionBoard = () => {
     for (let i = 0; i < data.length; i++) {
       arr.push(
         <tr>
-          <td>{data[i].id}</td>
+          <td>{i + 1 + page*pageSize}</td>
           <td>{data[i].osInfo}</td>
           <td>{data[i].serviceName}</td>
           <td>{data[i].serviceVersion}</td>
@@ -35,9 +36,12 @@ const VersionBoard = () => {
           <td>{data[i].packageInfo}</td>
           <td>{data[i].regTime}</td>
           <td>
-            <button>Test</button>
-            <button>수정</button>
-            <VersionDelete verId={data[i]}/>
+            <div className='actionBtns'>
+              <VersionTest result={[data[i].osInfo, data[i].serviceName, data[i].serviceVersion]} />
+              <VersionUpdate version={data[i]} />
+              <VersionDelete verId={data[i].id} />
+            </div>
+
           </td>
         </tr>
       )
@@ -46,19 +50,19 @@ const VersionBoard = () => {
   };
 
   const handlePage = (e) => {
-    if(e.target.value === "next"){
-      setPage(page+1);
-    } else {
-      setPage(page-1)
+    if (e.target.value === "next" && version.length === 10) {
+      setPage(page + 1);
+    } else if(e.target.value === "before" && page > 0) {
+      setPage(page - 1)
     }
   }
 
   return (
     <div>
       <div className="board">
-        <table >
-          <thead>
-            <tr>
+        <table className='table_board'>
+          <thead className='table_thead'>
+            <tr className='table_category'>
               <th >idx</th>
               <th >os</th>
               <th >service</th>
