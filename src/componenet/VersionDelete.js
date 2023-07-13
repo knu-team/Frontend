@@ -4,15 +4,15 @@ import axios from 'axios'
 const VersionDelete = (verId) => {
     const [Isdel, setIsDel] = useState(false);
     const [submit, setSubmit] = useState(false);
-    
-    console.log(verId)
 
+    console.log(verId.verId)
     useEffect(() => {
         if(Isdel === true){
         (async () => {
             try {
-                const response = await axios.delete(`http://ec2-54-180-37-118.ap-northeast-2.compute.amazonaws.com:8080/vercontrol/versions/${verId.id}`);
-                    setIsDel(false)
+                const response = await axios.delete(`http://ec2-54-180-37-118.ap-northeast-2.compute.amazonaws.com:8080/vercontrol/versions/${verId.verId}`);
+                console.log(response)    
+                setIsDel(false)
             } catch (e) {
                 // setSubmit(false)
                 console.log(e)
@@ -29,7 +29,7 @@ const VersionDelete = (verId) => {
         }
       }
     return (
-        <button className='delBtn' onClick={handleDelete} value={verId.delete}>삭제</button>
+        <button className='delBtn' onClick={handleDelete} value={Isdel}>삭제</button>
     )
 }
 
