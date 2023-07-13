@@ -5,16 +5,13 @@ import Modal from 'react-modal';
 const VersionUpdate = (props) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [submit, setSubmit] = useState(false);
-    const [osInfo, setOsInfo] = useState(props.version.osInfo);
-    const [serviceVersion, setServiceVersion] = useState(props.version.serviceVersion);
-    const [serviceName, setServiceName] = useState(props.version.serviceName);
-    const [updateType, setUpdateType] = useState(props.version.updateType);
-    const [message, setMessage] = useState(props.version.message);
-    const [packageInfo, setPackageInfo] = useState(props.version.packageInfo);
-    
-    
-    console.log(props.version.serviceName)
-console.log("ver"+props.version.serviceVersion)
+    const [osInfo, setOsInfo] = useState("");
+    const [serviceVersion, setServiceVersion] = useState("");
+    const [serviceName, setServiceName] = useState("");
+    const [updateType, setUpdateType] = useState();
+    const [message, setMessage] = useState("");
+    const [packageInfo, setPackageInfo] = useState("");
+
     useEffect(() => {
         if(submit === true){
         (async () => {
@@ -38,7 +35,16 @@ console.log("ver"+props.version.serviceVersion)
 
     return (
         <div>
-        <button className='updateBtn' onClick={() => setModalIsOpen(true)}>수정</button>
+        <button className='updateBtn' 
+        onClick={() => (
+            setModalIsOpen(true)
+            ,setOsInfo(props.version.osInfo)
+            ,setServiceVersion(props.version.serviceVersion)
+            ,setServiceName(props.version.serviceName)
+            ,setUpdateType(props.version.updateType)
+            ,setMessage(props.version.message)
+            ,setPackageInfo(props.version.packageInfo)
+            )}>수정</button>
         <div className='ModalBox'>
         <Modal
             isOpen={modalIsOpen}

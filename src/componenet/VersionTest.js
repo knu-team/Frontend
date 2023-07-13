@@ -6,9 +6,7 @@ const VersionTest = (props) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [submit, setSubmit] = useState(false);
     const [result, setResult] = useState('');
-    const [info, setInfo] = useState(props.result);
-
-    console.log(info)
+    const [info, setInfo] = useState('');
 
     useEffect(() => {
         if (submit === true) {
@@ -33,6 +31,7 @@ const VersionTest = (props) => {
 
     return (
         <div>
+            <button className='testBtn' onClick={() => (setSubmit(true), setModalIsOpen(true), setInfo(props.result))}>테스트</button>
             <div className='testModal'>
                 <Modal
                     isOpen={modalIsOpen}
@@ -41,16 +40,14 @@ const VersionTest = (props) => {
                     <div>
                         <p>Recent Version</p>
                         <div className='testResult'>  
-                            <p className='recentversion'>
+                            <p className='resulttext'>
                                {JSON.stringify(result)} 
                             </p>
                         </div>
                         <button className='resultcheckBtn' onClick={() => (setModalIsOpen(false))} >확인</button>
                     </div>
-
                 </Modal>
             </div>
-            <button className='testBtn' onClick={() => (setSubmit(true), setModalIsOpen(true))}>테스트</button>
         </div>
     )
 }

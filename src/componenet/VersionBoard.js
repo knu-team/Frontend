@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useRef,useState, useEffect } from 'react';
 import axios from 'axios'
 import VersionDelete from './VersionDelete.js'
 import VersionUpdate from './VersionUpdate.js'
@@ -12,34 +12,38 @@ const VersionBoard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log(page)
         const response = await axios.get(`http://ec2-54-180-37-118.ap-northeast-2.compute.amazonaws.com:8080/vercontrol/getconfigall?pageNumber=${page}&pageSize=${pageSize}`);
         setVersion(response.data);
+        console.log(version)
       } catch (e) {
         console.log(e)
       }
     };
-    fetchData();
+    fetchData()
   }, [page]);
 
-  function versionList(data) {
+  function versionList() {
     let arr = [];
 
-    for (let i = 0; i < data.length; i++) {
+    console.log(version)
+    for (let i = 0; i < version.length; i++) {
+
       arr.push(
         <tr>
           <td>{i + 1 + page*pageSize}</td>
-          <td>{data[i].osInfo}</td>
-          <td>{data[i].serviceName}</td>
-          <td>{data[i].serviceVersion}</td>
-          <td>{data[i].updateType.toString()}</td>
-          <td>{data[i].message}</td>
-          <td>{data[i].packageInfo}</td>
-          <td>{data[i].regTime}</td>
+          <td>{version[i].osInfo}</td>
+          <td>{version[i].serviceName}</td>
+          <td>{version[i].serviceVersion}</td>
+          <td>{version[i].updateType.toString()}</td>
+          <td>{version[i].message}</td>
+          <td>{version[i].packageInfo}</td>
+          <td>{version[i].regTime}</td>
           <td>
             <div className='actionBtns'>
-              <VersionTest result={[data[i].osInfo, data[i].serviceName, data[i].serviceVersion]} />
-              <VersionUpdate version={data[i]} />
-              <VersionDelete verId={data[i].id} />
+              <VersionTest result={[version[i].osInfo, version[i].serviceName, version[i].serviceVersion]} />
+              <VersionUpdate version={version[i]} />
+              <VersionDelete verId={version[i].id} />
             </div>
 
           </td>
@@ -48,12 +52,14 @@ const VersionBoard = () => {
     }
     return arr;
   };
-
+  
   const handlePage = (e) => {
-    if (e.target.value === "next" && version.length === 10) {
-      setPage(page + 1);
+    if (e.target.value === "next") {
+      setPage((page) => page+1);
+      console.log(`페이지넘버는 ${page}`)
     } else if(e.target.value === "before" && page > 0) {
-      setPage(page - 1)
+      setPage((page) => page - 1)
+      console.log(`페이지넘버는 ${page}`)
     }
   }
 
@@ -75,13 +81,14 @@ const VersionBoard = () => {
             </tr>
           </thead>
           <tbody>
-            {versionList(version)}
+            {/* {console.log(version)} */}
+            {versionList()}
           </tbody>
         </table>
       </div>
       <div className="pageControlers">
-        <button className='beforePage' value="before" onClick={handlePage}>이전페이지</button>
-        <button className='nextPage' value="next" onClick={handlePage}>다음페이지</button>
+        <button className='beforePage' value="before" onClick={handlePage}>이전 페이지</button>
+        <button className='nextPage' value="next" onClick={handlePage}>다음 페이지</button>
       </div>
     </div>
 
